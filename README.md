@@ -13,6 +13,7 @@ A tiny schedule coordination web app that is handy for exercising both the Ampli
 ## Running locally
 
 ```bash
+cp .env.local.example .env.local # fill in the values
 npm install
 npm run dev
 ```
@@ -23,9 +24,13 @@ Visit <http://localhost:3000> to create a schedule, then open the generated `/sc
 
 The API routes call Amplify Data directly via GraphQL. Provide the connection details in `.env.local` before running the dev server:
 
+1. Copy `.env.local.example` to `.env.local`.
+2. In the Amplify console, open **Backend > Data**, then copy the API endpoint, region, and API key (or inspect `amplify_outputs.json` if you pulled the backend locally).
+3. Paste those values into `.env.local`.
+
 | Variable                      | Description                                                                 |
 | ----------------------------- | --------------------------------------------------------------------------- |
-| `AMPLIFY_DATA_GRAPHQL_ENDPOINT` | AppSync/Amplify Data GraphQL endpoint URL (see `amplify_outputs.json`).     |
+| `AMPLIFY_DATA_GRAPHQL_ENDPOINT` | AppSync/Amplify Data GraphQL endpoint URL.                                  |
 | `AMPLIFY_DATA_REGION`         | AWS region that hosts the data backend.                                     |
 | `AMPLIFY_DATA_API_KEY`        | API key for the public authorization mode.                                  |
 | `AMPLIFY_DATA_AUTH_MODE`      | *(optional)* Amplify auth mode (`apiKey`, `iam`, `userPool`, etc.). Defaults to `apiKey`. |
