@@ -99,7 +99,9 @@ const mapSchedule = (
   record: ScheduleModel,
   responses: ParticipantModel[] = [],
 ): Schedule => {
-  const candidates = record.candidates ?? [];
+  const candidates = (record.candidates ?? []).filter(
+    (candidate): candidate is string => typeof candidate === "string",
+  );
   return {
     id: record.id,
     title: record.title,
@@ -113,7 +115,7 @@ const mapSchedule = (
 export const listSchedules = async (): Promise<Schedule[]> => {
   const client = ensureClient();
   const result = await client.models.Schedule.list({
-    selectionSet: ["id", "title", "description", "candidates", "createdAt"],
+    selectionSet: ["id", "title", "description", "candidates", "createdAt", "updatedAt"],
     limit: 200,
   });
   const schedules = throwIfErrors(result) ?? [];
@@ -126,7 +128,7 @@ export const getScheduleById = async (id: string): Promise<Schedule | undefined>
   const scheduleResult = await client.models.Schedule.get(
     { id },
     {
-      selectionSet: ["id", "title", "description", "candidates", "createdAt"],
+      selectionSet: ["id", "title", "description", "candidates", "createdAt", "updatedAt"],
     },
   );
 
@@ -162,6 +164,7 @@ export const createSchedule = async (payload: CreateSchedulePayload): Promise<Sc
     description: normalized.description,
     candidates: normalized.candidates,
     createdAt: now,
+    updatedAt: now,
   });
 
   const schedule = throwIfErrors(createResult);
@@ -225,6 +228,7 @@ export const upsertResponse = async (
       normalizedName,
       comment,
       answers,
+      createdAt: now,
       updatedAt: now,
     });
     throwIfErrors(createResult);

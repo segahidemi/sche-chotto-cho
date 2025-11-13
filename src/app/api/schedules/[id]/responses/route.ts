@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { upsertResponse } from "@/lib/dataService";
 import type { ResponsePayload } from "@/lib/types";
 
-interface RouteParams {
-  params: { id: string };
-}
+type RouteParams = {
+  params: Promise<{ id: string }>;
+};
 
 export async function POST(request: Request, { params }: RouteParams) {
   try {
     const payload = (await request.json()) as ResponsePayload;
-    const schedule = await upsertResponse(params.id, payload);
+    const { id } = await params;
+    const schedule = await upsertResponse(id, payload);
     return NextResponse.json(schedule, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

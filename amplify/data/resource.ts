@@ -7,6 +7,7 @@ export const schema = a.schema({
       description: a.string(),
       candidates: a.string().array().required(),
       createdAt: a.datetime().required(),
+      updatedAt: a.datetime(),
     })
     .authorization((allow) => [allow.publicApiKey()]),
   ParticipantResponse: a
@@ -16,11 +17,11 @@ export const schema = a.schema({
       normalizedName: a.string().required(),
       comment: a.string(),
       answers: a.json().required(),
-      updatedAt: a.datetime().required(),
       createdAt: a.datetime(),
+      updatedAt: a.datetime(),
     })
     .authorization((allow) => [allow.publicApiKey()])
-    .secondaryIndexes((index) => [index("byScheduleId", ["scheduleId"])])
+    .secondaryIndexes((index) => [index("scheduleId").name("byScheduleId")]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

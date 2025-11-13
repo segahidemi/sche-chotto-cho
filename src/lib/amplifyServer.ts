@@ -1,7 +1,9 @@
 import { Amplify } from "aws-amplify";
 import type { ResourcesConfig } from "aws-amplify";
 
-type GraphQLAuthMode = NonNullable<ResourcesConfig["API"]>["GraphQL"]["defaultAuthMode"];
+type GraphQLAuthMode = NonNullable<
+  NonNullable<ResourcesConfig["API"]>["GraphQL"]
+>["defaultAuthMode"];
 
 const requiredEnvVars = [
   "AMPLIFY_DATA_GRAPHQL_ENDPOINT",
